@@ -9,6 +9,9 @@ load_dotenv()
 class BotConfig:
     token: str
     admin_id: int
+    webhook_url: str = None
+    webhook_path: str = "/webhook"
+    port: int = 8000
 
 # Get configuration from environment
 def get_config() -> BotConfig:
@@ -20,9 +23,14 @@ def get_config() -> BotConfig:
     if not admin_id:
         raise ValueError("ADMIN_ID not found in environment variables")
     
+    webhook_url = os.getenv('WEBHOOK_URL')
+    port = int(os.getenv('PORT', '8000'))
+    
     return BotConfig(
         token=token,
-        admin_id=int(admin_id)
+        admin_id=int(admin_id),
+        webhook_url=webhook_url,
+        port=port
     )
 
 config = get_config()
