@@ -13,5 +13,5 @@ multidict==6.7.1
 propcache==0.4.1
 pydantic==2.9.2
 typing_extensions==4.15.0
-yarl==1.2.22.0
+yarl==1.22.0
 python-dotenv==1.0.0
