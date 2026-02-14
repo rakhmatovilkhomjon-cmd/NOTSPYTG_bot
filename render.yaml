@@ -1,0 +1,18 @@
+# Render Blueprint: Telegram bot as Web Service (webhook mode)
+# Set WEBHOOK_URL in the dashboard to https://<your-service-name>.onrender.com
+# so the app binds to PORT and receives Telegram updates via webhook.
+services:
+  - type: web
+    runtime: python
+    name: notspytg-bot
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_ID
+        sync: false
+      - key: WEBHOOK_URL
+        sync: false
+    numInstances: 1

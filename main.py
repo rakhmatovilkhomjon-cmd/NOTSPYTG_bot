@@ -64,19 +64,32 @@ async def main():
         logger.info("Starting bot in webhook mode...")
         # Create aiohttp application
         app = web.Application()
-        
+
+        # Run bot startup (set_webhook) when the web app starts
+        async def app_startup(_: web.Application) -> None:
+            await on_startup(bot)
+
+        app.on_startup.append(app_startup)
+
+        # Health check for Render and load balancers
+        async def health(_: web.Request) -> web.Response:
+            return web.Response(text="OK", status=200)
+
+        app.router.add_get("/", health)
+        app.router.add_get("/health", health)
+
         # Create webhook handler
         webhook_requests_handler = SimpleRequestHandler(
             dispatcher=dp,
             bot=bot,
         )
-        
+
         # Register webhook handler
         webhook_requests_handler.register(app, path=config.webhook_path)
-        
+
         # Setup application
         setup_application(app, dp, bot=bot)
-        
+
         # Start server
         logger.info(f"Starting webhook server on port {config.port}")
         web.run_app(app, host="0.0.0.0", port=config.port)

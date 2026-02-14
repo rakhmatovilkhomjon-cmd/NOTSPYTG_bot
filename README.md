@@ -773,6 +773,26 @@ if __name__ == '__main__':
 
 ## Deployment
 
+### Deploy on Render (Webhook)
+
+For production on [Render](https://render.com), use **webhook mode** so the app binds to `PORT` (fixes "no open ports") and only one consumer receives updates (fixes `TelegramConflictError`).
+
+1. **Create a Web Service** (not a Background Worker). Use the repo's `render.yaml` or set:
+   - **Build:** `pip install -r requirements.txt`
+   - **Start:** `python main.py`
+   - **Health check path:** `/health` (optional; root `/` also returns 200)
+
+2. **Environment variables** (in Render dashboard):
+   - `BOT_TOKEN` – from BotFather
+   - `ADMIN_ID` – your Telegram user ID
+   - `WEBHOOK_URL` – **required**: your service URL without trailing slash, e.g. `https://your-service-name.onrender.com`  
+     The app will register the webhook at `WEBHOOK_URL/webhook`.  
+   - `PORT` is set by Render automatically; do not override unless needed.
+
+3. **Single instance:** Keep exactly one instance (no scaling to multiple instances) and do not run the same bot locally or elsewhere with the same token. Only one process may receive updates (webhook or polling) per bot token.
+
+See [.env.example](.env.example) for a full list of variables.
+
 ### Production Configuration
 For production, create a separate configuration file:
 
