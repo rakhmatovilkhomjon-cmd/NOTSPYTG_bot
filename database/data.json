@@ -1,0 +1,69 @@
+{
+  "menu": {
+    "pizza": [
+      {
+        "id": 1,
+        "name": "Margherita",
+        "price": 12.0,
+        "description": "Fresh tomatoes, mozzarella, basil"
+      },
+      {
+        "id": 2,
+        "name": "Pepperoni",
+        "price": 14.0,
+        "description": "Pepperoni, mozzarella, tomato sauce"
+      },
+      {
+        "id": 3,
+        "name": "Hawaiian",
+        "price": 15.0,
+        "description": "Ham, pineapple, mozzarella"
+      }
+    ],
+    "burgers": [
+      {
+        "id": 4,
+        "name": "Classic Burger",
+        "price": 10.0,
+        "description": "Beef patty, lettuce, tomato, onion"
+      },
+      {
+        "id": 5,
+        "name": "Cheese Burger",
+        "price": 11.0,
+        "description": "Beef patty, cheese, lettuce, tomato"
+      },
+      {
+        "id": 6,
+        "name": "Veggie Burger",
+        "price": 9.0,
+        "description": "Plant-based patty, lettuce, tomato"
+      }
+    ],
+    "drinks": [
+      {
+        "id": 7,
+        "name": "Coca Cola",
+        "price": 3.0,
+        "description": "Classic soft drink"
+      },
+      {
+        "id": 8,
+        "name": "Coffee",
+        "price": 4.0,
+        "description": "Fresh brewed coffee"
+      },
+      {
+        "id": 9,
+        "name": "Orange Juice",
+        "price": 5.0,
+        "description": "Fresh squeezed orange juice"
+      }
+    ]
+  },
+  "orders": {},
+  "settings": {
+    "delivery_fee": 2.5,
+    "min_order": 15.0
+  }
+}
