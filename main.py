@@ -4,6 +4,7 @@ import sys
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+from aiogram.exceptions import TelegramConflictError
 from aiohttp import web
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
@@ -96,9 +97,23 @@ async def main():
     else:
         logger.info("Starting bot in polling mode...")
         try:
+            # Ensure no webhook is set and drop any pending updates before polling.
+            # This helps avoid 'Conflict: terminated by other getUpdates request' caused
+            # by leftover webhooks or pending updates on Telegram's side.
+            await bot.delete_webhook(drop_pending_updates=True)
+            logger.info("Webhook deleted before polling; dropped pending updates")
+
             await dp.start_polling(bot, drop_pending_updates=True)
         except KeyboardInterrupt:
             logger.info("Bot stopped by user")
+        except TelegramConflictError as e:
+            # If another getUpdates (polling) client is active, Telegram will return
+            # a conflict. Log a helpful message and exit so the process doesn't keep
+            # hammering the API with retries.
+            logger.error("TelegramConflictError: another getUpdates instance appears to be running.")
+            logger.error(str(e))
+            logger.error("Make sure only one bot instance is running (scale down other replicas or stop local processes). Exiting.")
+            sys.exit(1)
         except Exception as e:
             logger.error(f"Error occurred: {e}")
         finally:
